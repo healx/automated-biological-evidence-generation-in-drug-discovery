@@ -26,7 +26,8 @@ def find_jar(basepath: Path) -> Path:
     except ValueError as value_exception:
         raise Exception(
             "No .jar files found, have you run `$ make build-java` ? "
-            "Original Exception: %s", value_exception,
+            "Original Exception: %s",
+            value_exception,
         ) from value_exception
 
 
@@ -50,6 +51,7 @@ def run_anyburl(jar_path: Path, class_path: str, config_path: Path, memory: str 
     ]
 
     logger.info("Calling AnyBURL: %s", args)
+    print("Calling AnyBURL: %s", " ".join(args))
 
     with subprocess.Popen(
         args,
@@ -66,6 +68,5 @@ def run_anyburl(jar_path: Path, class_path: str, config_path: Path, memory: str 
             error = process.stderr.read() if process.stderr is not None else ""
             stdout = process.stdout.read() if process.stdout is not None else ""
             raise ChildProcessError(
-                "AnyBURL exited with non-zero code:",
-                process.returncode, error, stdout
+                "AnyBURL exited with non-zero code:", process.returncode, error, stdout
             )

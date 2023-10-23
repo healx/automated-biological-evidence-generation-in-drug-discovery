@@ -1,0 +1,3 @@
+1	DISEASE_ancestor_DISEASE
+2	COMPOUND_in_trial_for_DISEASE
+2	DISEASE_has_orphan_designation_for_COMPOUND

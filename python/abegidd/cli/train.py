@@ -10,7 +10,8 @@ logger = logging.getLogger(__name__)
 
 @click.command()
 @click.argument(
-    "data-dir", type=click.Path(dir_okay=True, file_okay=False, exists=True),
+    "data-dir",
+    type=click.Path(dir_okay=True, file_okay=False, exists=True),
 )
 def _train(data_dir: str) -> None:
     logger.setLevel(level=logging.DEBUG)
