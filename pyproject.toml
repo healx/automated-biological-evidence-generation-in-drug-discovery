@@ -14,7 +14,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
+    "attrs>=23",
     "click>=8",
+    "numpy>=1.26"
 ]
 
 [project.urls]
@@ -26,8 +28,9 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-anyburl-train = "abegidd.cli.train:_train"
 anyburl-predict = "abegidd.cli.predict:_predict"
+anyburl-train = "abegidd.cli.train:_train"
+healx-chains = "abegidd.cli.chains:_chains"
 
 [tool.setuptools.packages.find]
 where = ["python"]
