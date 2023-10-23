@@ -1,0 +1,33 @@
+[project]
+name = "ABEGIDD"
+version = "0.0.1"
+authors = [
+    { name="Saatviga Sudhahar", email="saatviga.sudhahar@healx.io" },
+    { name="Dan O'Donovan", email="dan.odonovan@healx.io" },
+]
+description = "Code and data samples for automated biological evidence generation in drug-discovery."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "click>=8",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/healx/automated-biological-evidence-generation-in-drug-discovery"
+"Issues" = "https://github.com/healx/automated-biological-evidence-generation-in-drug-discovery/issues"
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+anyburl-train = "abegidd.cli.train:_train"
+
+[tool.setuptools.packages.find]
+where = ["python"]
+include = ["abegidd"]
