@@ -22,6 +22,7 @@ def is_len_2(instance, attribute, value):
     if len(value) != 2:
         raise ValueError("_Tree tuple is not length 2")
 
+
 @define
 class _Tree:
     """Utility class for carrying information about the discovered paths."""
@@ -91,9 +92,7 @@ def _one_hop_paths_with_metapath(
 
     roots = [
         _Tree(triple)
-        for triple in _linked_pairs(
-            index_lookup, start_node, edge=metapath.edges[0]
-        )
+        for triple in _linked_pairs(index_lookup, start_node, edge=metapath.edges[0])
     ]
 
     for first_pair in roots:
@@ -135,9 +134,7 @@ def _two_hop_paths_with_metapath(
 
     roots = [
         _Tree(triple)
-        for triple in _linked_pairs(
-            index_lookup, start_node, edge=metapath.edges[0]
-        )
+        for triple in _linked_pairs(index_lookup, start_node, edge=metapath.edges[0])
     ]
 
     for first_pair in roots:
@@ -188,9 +185,7 @@ def _three_hop_paths_with_metapath(
 
     roots = [
         _Tree(triple)
-        for triple in _linked_pairs(
-            index_lookup, start_node, edge=metapath.edges[0]
-        )
+        for triple in _linked_pairs(index_lookup, start_node, edge=metapath.edges[0])
     ]
 
     for first_pair in roots:
@@ -216,7 +211,7 @@ def _three_hop_paths_with_metapath(
                         index_lookup,
                         third_pair.pair[1],
                         edge=metapath.edges[3],
-                        end_node_index=end_node
+                        end_node_index=end_node,
                     )
                 ]
 
