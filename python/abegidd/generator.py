@@ -2,23 +2,23 @@ import logging
 import re
 from typing import Collection, List, Optional, Tuple
 
-from attr import define
 import numpy as np
+from attr import define
 
 from abegidd.entities import (
     Atom,
-    Explanation,
-    Prediction,
-    Rule,
     EdgeType,
     EvidenceChain,
     EvidenceChainScoredPath,
     EvidenceChainsList,
+    Explanation,
     MetaPath,
     MetapathEdgeData,
+    Prediction,
+    Rule,
 )
-from abegidd.path_scorer import DegreeWeightedPathScorer, CachedArrayIndexLookup
-from abegidd.graph import paths_with_metapath, graph_from_triples
+from abegidd.graph import graph_from_triples, paths_with_metapath
+from abegidd.path_scorer import CachedArrayIndexLookup, DegreeWeightedPathScorer
 
 logger = logging.getLogger(__name__)
 

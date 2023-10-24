@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Iterator, List, Tuple
 
-from abegidd.entities import Explanation, Prediction, PredictedEntity, rule_from_str
+from abegidd.entities import Explanation, PredictedEntity, Prediction, rule_from_str
 
 
 def read_predictions(filepath: Path) -> List[Prediction]:

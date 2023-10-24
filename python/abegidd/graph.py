@@ -1,11 +1,10 @@
-from typing import List, Optional, Tuple, Union, Iterable
-
-from attrs import define, field, validators
+from typing import Iterable, List, Optional, Tuple, Union
 
 import numpy as np
+from attrs import define, field, validators
 
-from abegidd.iterables import flatten
 from abegidd.entities import EdgeType, Graph, MetaPath
+from abegidd.iterables import flatten
 from abegidd.path_scorer import CachedArrayIndexLookup
 
 

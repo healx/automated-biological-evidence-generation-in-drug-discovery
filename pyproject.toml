@@ -40,3 +40,7 @@ healx-chains = "abegidd.cli.chains:_chains"
 [tool.setuptools.packages.find]
 where = ["python"]
 include = ["abegidd"]
+
+[tool.isort]
+profile = "black"
+known_first_party = ["abegidd"]

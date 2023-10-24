@@ -1,6 +1,6 @@
 from collections import defaultdict
-from typing import Dict, List
 from pathlib import Path
+from typing import Dict, List
 
 
 def read_predictions_filters(filepath: Path) -> List[str]:
