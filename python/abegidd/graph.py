@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Tuple, Union, Iterable
+from typing import List, Optional, Tuple, Union, Iterable
 
 from attrs import define, field, validators
 
