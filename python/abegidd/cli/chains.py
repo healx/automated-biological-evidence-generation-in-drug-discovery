@@ -7,14 +7,13 @@ import click
 
 from abegidd.entities import Explanation, Prediction
 from abegidd.filters import filter_explanations, filter_predictions_for_node_names
+from abegidd.generator import EvidenceChainsGenerator
 from abegidd.io import (
     anyburl,
     read_explanations_filters,
     read_predictions_filters,
     write_evidence_chains,
 )
-from abegidd.generator import EvidenceChainsGenerator
-
 
 logger = logging.getLogger(__name__)
 

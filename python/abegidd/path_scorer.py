@@ -1,8 +1,9 @@
-from functools import lru_cache
 from collections import Counter
-from typing import List, Tuple, Optional
-from attr import define
+from functools import lru_cache
+from typing import List, Optional, Tuple
+
 import numpy as np
+from attr import define
 
 
 @define
