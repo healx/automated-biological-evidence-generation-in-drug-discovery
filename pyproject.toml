@@ -19,6 +19,11 @@ dependencies = [
     "numpy>=1.26"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "tox"
+]
+
 [project.urls]
 "Homepage" = "https://github.com/healx/automated-biological-evidence-generation-in-drug-discovery"
 "Issues" = "https://github.com/healx/automated-biological-evidence-generation-in-drug-discovery/issues"
