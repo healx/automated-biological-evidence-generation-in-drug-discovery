@@ -3,7 +3,6 @@ from typing import Dict, List
 from pathlib import Path
 
 
-
 def read_predictions_filters(filepath: Path) -> List[str]:
     with filepath.open("r") as fh:
         return [line.strip("\n") for line in fh.readlines()]

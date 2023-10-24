@@ -155,5 +155,6 @@ def generate_evidence_chains(
 
     return chains_generator.get_chains_for_predicted_heads()
 
+
 if __name__ == "__main__":
     _chains()
