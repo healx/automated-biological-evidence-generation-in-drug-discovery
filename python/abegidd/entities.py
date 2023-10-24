@@ -171,7 +171,7 @@ class EvidenceChain:
     paths
     """
 
-    metapath: List[str]
+    metapath: List["EdgeType"]
     start_node: str
     end_node: str
     paths: List[EvidenceChainScoredPath]

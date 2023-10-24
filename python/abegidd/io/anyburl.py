@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Iterator, List, Tuple
+from typing import Any, Dict, Iterator, List, Tuple
 
 from abegidd.entities import Explanation, PredictedEntity, Prediction, rule_from_str
 
@@ -30,7 +30,7 @@ def read_predictions(filepath: Path) -> List[Prediction]:
     return _deduplicate_list(predictions)
 
 
-def _read_prediction(filepath: Path) -> Iterator[Tuple[Tuple[str, str, str], str, str]]:
+def _read_prediction(filepath: Path) -> Iterator[Tuple[Tuple[str, ...], str, str]]:
     """
     Yields predictions from output file. Not lazy as the out_file
     needs to be read entirely into memory
@@ -61,14 +61,14 @@ def _predicted_entity_list(line: str) -> List[PredictedEntity]:
     ]
 
 
-def _chunks(lst, chunk_size):
+def _chunks(lst: List[str], chunk_size: int) -> Iterator[List[str]]:
     """Generator utility for chunking the prediction line data"""
     for i in range(0, len(lst), chunk_size):
         yield lst[i : i + chunk_size]
 
 
-def _deduplicate_list(values: List) -> List:
-    seen = {}
+def _deduplicate_list(values: List[Any]) -> List[Any]:
+    seen: Dict[Any, Any] = {}
     return [seen.setdefault(value, value) for value in values if value not in seen]
 
 

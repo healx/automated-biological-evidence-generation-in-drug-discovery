@@ -67,7 +67,6 @@ def paths_with_metapath(
         raise NotImplementedError(f"Metapaths of length {len(metapath)}")
 
     return paths
-    return _remove_start_end_duplicates(start_node, end_node, paths)
 
 
 def _one_hop_paths_with_metapath(
@@ -255,11 +254,11 @@ def _linked_pairs(
     index_lookup: CachedArrayIndexLookup,
     node: str,
     edge: EdgeType,
-    end_node_index: Optional[int] = None,
+    end_node_index: Optional[str] = None,
 ) -> Iterable[Tuple[str, str]]:
     if edge.forward:
         pairs = index_lookup.linked_tails(node, edge.label, end_node_index)
     else:
         pairs = index_lookup.linked_heads(node, edge.label, end_node_index)
 
-    return map(tuple, np.atleast_2d(pairs))
+    return pairs
