@@ -21,7 +21,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "tox"
+    "tox",
+    "mypy"
 ]
 
 [project.urls]

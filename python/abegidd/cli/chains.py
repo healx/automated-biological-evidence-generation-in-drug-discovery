@@ -91,7 +91,7 @@ def check_explanations_filter_in_triples(
     explanations_filters: Dict[int, List[str]], triples: List[Tuple[str, str, str]]
 ) -> None:
     relation_names = set(relation for _, relation, _ in triples)
-    for rank, explanations_filters in explanations_filters.items():
+    for _, explanations_filters in explanations_filters.items():  # type: ignore
         for explanations_filter in explanations_filters:
             if explanations_filter not in relation_names:
                 raise ValueError(
