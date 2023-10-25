@@ -1,2 +1,9 @@
 # IDE files
 .idea
+.python-version
+
+python/*.egg-info
+__pycache__
+java/target
+
+results
