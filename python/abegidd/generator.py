@@ -64,12 +64,6 @@ class EvidenceChainsGenerator:
     _graph: Optional = None
 
     def __attrs_post_init__(self):
-        # self._graph = graph
-        # self._predictions = predictions
-        # self._explanations = explanations
-        # self._edge_lookup = to_dict(
-        #     (et.label, et.index) for et in self._graph.edge_types
-        # )
         self._scoring = DegreeWeightedPathScorer(self.triples)
         self._index_lookup = CachedArrayIndexLookup(np.array(self.triples))
         self._graph = graph_from_triples(self.triples)
