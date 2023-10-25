@@ -7,14 +7,13 @@ import click
 
 from abegidd.entities import Explanation, Prediction
 from abegidd.filters import filter_explanations, filter_predictions_for_node_names
+from abegidd.generator import EvidenceChainsGenerator
 from abegidd.io import (
     anyburl,
     read_explanations_filters,
     read_predictions_filters,
     write_evidence_chains,
 )
-from abegidd.generator import EvidenceChainsGenerator
-
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +91,7 @@ def check_explanations_filter_in_triples(
     explanations_filters: Dict[int, List[str]], triples: List[Tuple[str, str, str]]
 ) -> None:
     relation_names = set(relation for _, relation, _ in triples)
-    for rank, explanations_filters in explanations_filters.items():
+    for _, explanations_filters in explanations_filters.items():  # type: ignore
         for explanations_filter in explanations_filters:
             if explanations_filter not in relation_names:
                 raise ValueError(
@@ -154,6 +153,7 @@ def generate_evidence_chains(
     )
 
     return chains_generator.get_chains_for_predicted_heads()
+
 
 if __name__ == "__main__":
     _chains()

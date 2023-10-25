@@ -15,6 +15,20 @@ To compile the java code;
 ```shell
 $ make build-java
 ```
+## Python
+
+We recommend instaling the code in a python virtualenv. Once you have a virtualenv set up, the code can be installed
+with
+
+```shell
+$ pip install -e '.[dev]'
+```
+
+and tests can be run with tox
+
+```shell
+$ tox
+```
 
 
 ## Running the example: Parkinson Disease

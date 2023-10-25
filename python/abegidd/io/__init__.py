@@ -1,8 +1,8 @@
 from collections import defaultdict
-from typing import Dict, List
 from pathlib import Path
+from typing import Dict, List
 
-from .chains import write_evidence_chains
+from abegidd.io.chains import write_evidence_chains
 
 
 def read_predictions_filters(filepath: Path) -> List[str]:
@@ -23,5 +23,5 @@ __ALL__ = [
     "anyburl",
     "read_predictions_filter",
     "read_explanations_filter",
-    "write_evidence_chains",
+    write_evidence_chains,
 ]

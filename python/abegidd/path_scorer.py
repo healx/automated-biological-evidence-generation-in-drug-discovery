@@ -1,8 +1,9 @@
-from functools import lru_cache
 from collections import Counter
-from typing import List, Tuple, Optional
-from attr import define
+from functools import lru_cache
+from typing import Callable, List, Optional, Tuple
+
 import numpy as np
+from attr import define, field
 
 
 @define
@@ -10,14 +11,14 @@ class DegreeWeightedPathScorer:
     """Class to find the DWPC scores for a list of paths."""
 
     triples: List[Tuple[str, str, str]]
-    node_degrees_lookup: Optional[Counter[str, int]] = None
+    node_degrees_lookup: Counter[str] = field(factory=Counter)
 
     def __attrs_post_init__(self):
         """Cache the degree for all nodes in the graph.
 
         :return: DegreeWeightedPathScorer class
         """
-        self.node_degrees_lookup: Counter[str, int] = Counter(
+        self.node_degrees_lookup = Counter(
             node_name for head, _, tail in self.triples for node_name in (head, tail)
         )
 
@@ -44,9 +45,9 @@ class CachedArrayIndexLookup:
     """Numpy based array index lookup class with lru mask caching."""
 
     array: np.ndarray
-    _relations_cache: Optional = None
-    _tails_cache: Optional = None
-    _heads_cache: Optional = None
+    _relations_cache: Callable = field(factory=lru_cache)
+    _tails_cache: Callable = field(factory=lru_cache)
+    _heads_cache: Callable = field(factory=lru_cache)
 
     def __attrs_post_init__(self):
         """Initialise the CachedArrayIndexLookup (internal class)."""
@@ -77,7 +78,7 @@ class CachedArrayIndexLookup:
 
     def linked_tails(
         self, head: str, edge_label: str, end_node_index: Optional[str] = None
-    ) -> np.ndarray:
+    ) -> List[Tuple[str, str]]:
         """Return all tails linked by head and edge from cache.
 
         :param head:
@@ -90,11 +91,11 @@ class CachedArrayIndexLookup:
         pairs = self.array[indices][:, [0, 2]]
         if end_node_index is not None:
             pairs = pairs[pairs[:, 1] == end_node_index]
-        return pairs
+        return [(head, tail) for (head, tail) in np.atleast_2d(pairs)]
 
     def linked_heads(
-        self, tail: str, edge_index: str, end_node_index: Optional[str] = None
-    ) -> np.ndarray:
+        self, tail: str, edge_label: str, end_node_index: Optional[str] = None
+    ) -> List[Tuple[str, str]]:
         """Return all heads linked by tail and edge from cache.
 
         :param tail_index:
@@ -103,8 +104,8 @@ class CachedArrayIndexLookup:
         :return: List of head indices
         """
         linked_nodes_index = self._tails(tail)
-        indices = np.logical_and(linked_nodes_index, self._relations(edge_index))
+        indices = np.logical_and(linked_nodes_index, self._relations(edge_label))
         pairs = self.array[indices][:, [0, 2]][:, ::-1]
         if end_node_index is not None:
             pairs = pairs[pairs[:, 1] == end_node_index]
-        return pairs
+        return [(head, tail) for (head, tail) in np.atleast_2d(pairs)]

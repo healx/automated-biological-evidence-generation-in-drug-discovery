@@ -1,11 +1,10 @@
-from typing import Any, List, Optional, Tuple, Union, Iterable
-
-from attrs import define, field, validators
+from typing import Iterable, List, Optional, Tuple, Union
 
 import numpy as np
+from attrs import define, field, validators
 
-from abegidd.iterables import flatten
 from abegidd.entities import EdgeType, Graph, MetaPath
+from abegidd.iterables import flatten
 from abegidd.path_scorer import CachedArrayIndexLookup
 
 
@@ -21,6 +20,7 @@ def graph_from_triples(triples: List[Tuple[str, str, str]]) -> Graph:
 def is_len_2(instance, attribute, value):
     if len(value) != 2:
         raise ValueError("_Tree tuple is not length 2")
+
 
 @define
 class _Tree:
@@ -67,7 +67,6 @@ def paths_with_metapath(
         raise NotImplementedError(f"Metapaths of length {len(metapath)}")
 
     return paths
-    return _remove_start_end_duplicates(start_node, end_node, paths)
 
 
 def _one_hop_paths_with_metapath(
@@ -91,9 +90,7 @@ def _one_hop_paths_with_metapath(
 
     roots = [
         _Tree(triple)
-        for triple in _linked_pairs(
-            index_lookup, start_node, edge=metapath.edges[0]
-        )
+        for triple in _linked_pairs(index_lookup, start_node, edge=metapath.edges[0])
     ]
 
     for first_pair in roots:
@@ -135,9 +132,7 @@ def _two_hop_paths_with_metapath(
 
     roots = [
         _Tree(triple)
-        for triple in _linked_pairs(
-            index_lookup, start_node, edge=metapath.edges[0]
-        )
+        for triple in _linked_pairs(index_lookup, start_node, edge=metapath.edges[0])
     ]
 
     for first_pair in roots:
@@ -188,9 +183,7 @@ def _three_hop_paths_with_metapath(
 
     roots = [
         _Tree(triple)
-        for triple in _linked_pairs(
-            index_lookup, start_node, edge=metapath.edges[0]
-        )
+        for triple in _linked_pairs(index_lookup, start_node, edge=metapath.edges[0])
     ]
 
     for first_pair in roots:
@@ -216,7 +209,7 @@ def _three_hop_paths_with_metapath(
                         index_lookup,
                         third_pair.pair[1],
                         edge=metapath.edges[3],
-                        end_node_index=end_node
+                        end_node_index=end_node,
                     )
                 ]
 
@@ -261,11 +254,11 @@ def _linked_pairs(
     index_lookup: CachedArrayIndexLookup,
     node: str,
     edge: EdgeType,
-    end_node_index: Optional[int] = None,
+    end_node_index: Optional[str] = None,
 ) -> Iterable[Tuple[str, str]]:
     if edge.forward:
         pairs = index_lookup.linked_tails(node, edge.label, end_node_index)
     else:
         pairs = index_lookup.linked_heads(node, edge.label, end_node_index)
 
-    return map(tuple, np.atleast_2d(pairs))
+    return pairs

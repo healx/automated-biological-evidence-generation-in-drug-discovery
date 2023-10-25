@@ -1,24 +1,26 @@
 import logging
 import re
-from typing import Collection, Dict, List, Optional, Tuple
+from typing import Collection, List, Optional, Tuple
 
-from attr import define, evolve
 import numpy as np
+from attr import define, field
 
 from abegidd.entities import (
     Atom,
-    Explanation,
-    Prediction,
-    Rule,
     EdgeType,
     EvidenceChain,
     EvidenceChainScoredPath,
     EvidenceChainsList,
+    Explanation,
+    Graph,
     MetaPath,
     MetapathEdgeData,
+    PredictedEntity,
+    Prediction,
+    Rule,
 )
-from abegidd.path_scorer import DegreeWeightedPathScorer, CachedArrayIndexLookup
-from abegidd.graph import paths_with_metapath, graph_from_triples
+from abegidd.graph import graph_from_triples, paths_with_metapath
+from abegidd.path_scorer import CachedArrayIndexLookup, DegreeWeightedPathScorer
 
 logger = logging.getLogger(__name__)
 
@@ -59,9 +61,9 @@ class EvidenceChainsGenerator:
     triples: List[Tuple[str, str, str]]
     predictions: Collection[Prediction]
     explanations: Collection[Explanation]
-    _scoring: Optional = None
-    _index_lookup: Optional = None
-    _graph: Optional = None
+    _scoring: DegreeWeightedPathScorer = field(alias="_scoring", init=False)
+    _index_lookup: CachedArrayIndexLookup = field(alias="_index_lookup", init=False)
+    _graph: Graph = field(alias="_graph", init=False)
 
     def __attrs_post_init__(self):
         self._scoring = DegreeWeightedPathScorer(self.triples)
@@ -150,7 +152,7 @@ class EvidenceChainsGenerator:
         return EvidenceChain(meta_path.edges, start_node, end_node, chains)
 
     def _get_rule_data_from_explanations(
-        self, explanation_attr: str, pred_node: str
+        self, explanation_attr: str, pred_node: PredictedEntity
     ) -> List[_RuleData]:
         """
         Fetches the explanations using the explanation attr, and

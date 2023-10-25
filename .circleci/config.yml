@@ -1,0 +1,33 @@
+version: 2.1
+orbs:
+  python: circleci/python@2.1.1
+
+jobs:
+  tox:
+    executor:
+      name: python/default
+      tag: "3.11"
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pyproject.toml" }}
+            - v1-dependencies-
+      - python/install-packages:
+          pkg-manager: pip-dist
+          args: "-e '.[dev]'"
+      - run:
+          name: Run tox
+          command: tox
+      - save_cache:
+          paths:
+            - ./.tox
+            - /home/circleci/.cache/pip
+            - /home/circleci/.pyenv/versions
+            - /home/circleci/.local/lib
+          key: v1-dependencies-{{ checksum "pyproject.toml" }}
+
+workflows:
+  test:
+    jobs:
+      - tox 
