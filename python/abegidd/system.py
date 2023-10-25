@@ -1,6 +1,6 @@
+import logging
 import re
 import subprocess
-import logging
 from pathlib import Path
 
 from abegidd.iterables import first

@@ -7,7 +7,7 @@ authors = [
 ]
 description = "Code and data samples for automated biological evidence generation in drug-discovery."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = "<3.13,>=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -17,6 +17,12 @@ dependencies = [
     "attrs>=23",
     "click>=8",
     "numpy>=1.26"
+]
+
+[project.optional-dependencies]
+dev = [
+    "tox",
+    "mypy"
 ]
 
 [project.urls]
@@ -35,3 +41,7 @@ healx-chains = "abegidd.cli.chains:_chains"
 [tool.setuptools.packages.find]
 where = ["python"]
 include = ["abegidd"]
+
+[tool.isort]
+profile = "black"
+known_first_party = ["abegidd"]
