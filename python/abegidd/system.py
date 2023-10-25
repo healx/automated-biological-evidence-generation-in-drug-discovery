@@ -3,7 +3,7 @@ import subprocess
 import logging
 from pathlib import Path
 
-from abegidd import first
+from abegidd.iterables import first
 
 logger = logging.getLogger(__file__)
 

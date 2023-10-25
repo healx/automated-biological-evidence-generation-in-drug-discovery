@@ -4,7 +4,7 @@ from attrs import define, field, validators
 
 import numpy as np
 
-from abegidd import flatten
+from abegidd.iterables import flatten
 from abegidd.entities import EdgeType, Graph, MetaPath
 from abegidd.path_scorer import CachedArrayIndexLookup
 
