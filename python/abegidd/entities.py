@@ -1,5 +1,5 @@
 import re
-from typing import List, Tuple
+from typing import List, Tuple, TypedDict
 
 from attrs import define, field, frozen
 
@@ -290,3 +290,26 @@ class MetapathEdgeData:
             head_type=self.head_type,
             tail_type=self.tail_type,
         )
+
+
+class JsonMetapath(TypedDict):
+    """
+    JSON type for metapath labels
+    """
+
+    label: str
+    reversed: bool
+
+
+class JsonChain(TypedDict):
+    """
+    JSON type for evidence chain
+    """
+
+    prediction: str
+    prediction_score: float
+    start_node: str
+    end_node: str
+    metapath: List[JsonMetapath]
+    path_score: float
+    path: List[str]

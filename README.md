@@ -47,6 +47,10 @@ further results are written to the `results` directory.
 
 ### Filter the rules and create Evidence
 
+Run this command to create a list of evidence chains for "Parkinson disease" treatments (defined in [
+data/parkinson_disease_predicted_treatments.txt](
+data/parkinson_disease_predicted_treatments.txt)), the output is written to `evidence-chains.jsonl`.
+
 ```shell
 $ healx-chains \
     data \
@@ -56,4 +60,17 @@ $ healx-chains \
     --predictions-filter-file data/parkinson_disease_predicted_treatments.txt \
     --explanations-filter-file data/parkinson_disease_explanations_filter.txt \
     --disease "Parkinson disease"
+```
+
+### Filter the chains for Parkinson Disease
+
+Run this command (after creating the evidence chains file) to filter chains by gene and pathway for "Parkinson disease".
+
+```shell
+$ healx-gene-pathway-chains-filter \
+    evidence-chains.jsonl \
+    data/parkinson-disease-filter/genes.txt \
+    data/parkinson-disease-filter/pathways.txt \
+    data/parkinson-disease-filter/predictions.txt \
+    --filtered-evidence-chains-file filtered-evidence-chains.txt
 ```
