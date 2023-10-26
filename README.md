@@ -48,8 +48,8 @@ further results are written to the `results` directory.
 ### Filter the rules and create Evidence
 
 Run this command to create a list of evidence chains for "Parkinson disease" treatments (defined in [
-ata/parkinson_disease_predicted_treatments.txt](
-ata/parkinson_disease_predicted_treatments.txt)), the output is written to `evidence-chains.jsonl`.
+data/parkinson_disease_predicted_treatments.txt](
+data/parkinson_disease_predicted_treatments.txt)), the output is written to `evidence-chains.jsonl`.
 
 ```shell
 $ healx-chains \
