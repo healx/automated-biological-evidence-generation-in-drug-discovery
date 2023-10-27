@@ -1,4 +1,3 @@
-import json
 import logging
 from collections import Counter
 from functools import partial
@@ -10,6 +9,7 @@ from typing import Generator, Iterable, List, Set, Tuple
 import click
 
 from abegidd.entities import JsonChain
+from abegidd.io import read_evidence_chains
 
 
 @click.command
@@ -42,17 +42,12 @@ def _chains_filter(
     )
 
     chain_prediction_count: Counter[str] = Counter(
-        map(
-            itemgetter("prediction"),
-            map(json.loads, Path(evidence_chains_file).open("r").readlines()),
-        )
+        map(itemgetter("prediction"), read_evidence_chains(Path(evidence_chains_file)))
     )
 
     filtered_chains: List[JsonChain] = [
         json_chain
-        for json_chain in map(
-            json.loads, Path(evidence_chains_file).open("r").readlines()
-        )
+        for json_chain in read_evidence_chains(Path(evidence_chains_file))
         if _filter(json_chain)
     ]
 
