@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
-from typing import List
+from typing import Iterable, List
 
-from abegidd.entities import EvidenceChainsList
+from abegidd.entities import EvidenceChainsList, JsonChain
 
 
 def write_evidence_chains(filepath: Path, chains: List[EvidenceChainsList]):
@@ -69,3 +69,7 @@ def write_evidence_chains(filepath: Path, chains: List[EvidenceChainsList]):
 
                     json_str = json.dumps(line_blob)
                     fh.write(f"{json_str}\n")
+
+
+def read_evidence_chains(filepath: Path) -> Iterable[JsonChain]:
+    yield from map(json.loads, Path(filepath).open("r").readlines())
