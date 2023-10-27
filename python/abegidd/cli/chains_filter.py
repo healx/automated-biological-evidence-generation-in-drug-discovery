@@ -1,10 +1,11 @@
 import json
+import logging
 from collections import Counter
 from functools import partial
 from itertools import groupby
 from operator import itemgetter
 from pathlib import Path
-from typing import List, Set
+from typing import Generator, Iterable, List, Set, Tuple
 
 import click
 
@@ -67,11 +68,25 @@ def _write_filtered_chains(chains: List[JsonChain], output_file: str):
             fh.write(f"{line}\n")
 
 
+def _group_chains_by_prediction(
+    chains=Generator[JsonChain, None, None]
+) -> Generator[Tuple[str, Iterable[JsonChain]], None, None]:
+    """
+    Returns a generator which whill lazily return tuples with the prediction as a string
+    and an iterable containing the chains
+    :param chains:
+    :yield: prediction and iterable of chains
+    """
+    sorted_chains = sorted(chains, key=itemgetter("prediction"))
+    for prediction, group in groupby(sorted_chains, itemgetter("prediction")):
+        logging.info("Grouping %s chains", prediction)
+        yield prediction, group
+
+
 def _print_prediction_stats(
     filtered_chains: List[JsonChain], chain_prediction_count: Counter[str]
 ) -> None:
-    sorted_chains = sorted(filtered_chains, key=itemgetter("prediction"))
-    for prediction, group in groupby(sorted_chains, itemgetter("prediction")):
+    for prediction, group in _group_chains_by_prediction(filtered_chains):
         prediction_name = prediction.strip("_COMPOUND").upper()
         print(
             f"Total paths for {prediction_name}: {chain_prediction_count[prediction]}"
