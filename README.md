@@ -21,13 +21,18 @@ We recommend instaling the code in a python virtualenv. Once you have a virtuale
 with
 
 ```shell
-$ pip install -e '.[dev]'
+pip install -e '.[dev]'
 ```
 
 and tests can be run with tox
 
 ```shell
-$ tox
+tox
+```
+
+and linters can be run with the shortchut
+```shell
+make lint
 ```
 
 
@@ -35,13 +40,13 @@ $ tox
 
 Train AnyBURL using the graph provided in [`data/triples.txt`](data/triples.txt)
 ```shell
-$ anyburl-train data
+anyburl-train data
 ```
 results are written to a `results` directory.
 
 Generate rules from the trained AnyBURL artefacts in `results`
 ```shell
-$ anyburl-predict data
+anyburl-predict data
 ```
 further results are written to the `results` directory.
 
@@ -52,14 +57,13 @@ data/parkinson_disease_predicted_treatments.txt](
 data/parkinson_disease_predicted_treatments.txt)), the output is written to `evidence-chains.jsonl`.
 
 ```shell
-$ healx-chains \
+healx-chains \
     data \
     results \
     results/predict-1000 \
     results/predict-explanation \
     --predictions-filter-file data/parkinson_disease_predicted_treatments.txt \
-    --explanations-filter-file data/parkinson_disease_explanations_filter.txt \
-    --disease "Parkinson disease"
+    --explanations-filter-file data/parkinson_disease_explanations_filter.txt
 ```
 
 ### Filter the chains for Parkinson Disease
@@ -67,10 +71,11 @@ $ healx-chains \
 Run this command (after creating the evidence chains file) to filter chains by gene and pathway for "Parkinson disease".
 
 ```shell
-$ healx-gene-pathway-chains-filter \
+healx-gene-pathway-chains-filter \
     evidence-chains.jsonl \
     data/parkinson-disease-filter/genes.txt \
     data/parkinson-disease-filter/pathways.txt \
     data/parkinson-disease-filter/predictions.txt \
+    data/parkinson_disease_explanations_filter.txt \
     --filtered-evidence-chains-file filtered-evidence-chains.txt
 ```
