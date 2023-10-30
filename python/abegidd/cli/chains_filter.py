@@ -8,6 +8,7 @@ import click
 
 from abegidd.entities import JsonChain
 from abegidd.expanders import build_deductive_chains, group_chains_by_prediction
+from abegidd.filters import filter_low_priority_duplicate_chains
 from abegidd.io import read_evidence_chains
 
 
@@ -46,21 +47,32 @@ def _chains_filter(
         compound_predictions=compound_predictions,
     )
 
+    # read chains from file
     chains: List[JsonChain] = [
         json_chain for json_chain in read_evidence_chains(Path(evidence_chains_file))
     ]
     print(f"Read {len(chains)} from file {evidence_chains_file}")
 
+    # add additional chains using deductive reasoning
     inferred_chains: List[JsonChain] = list(
         build_deductive_chains(chains, prioritised_edge_names=prioritised_edge_names)
     )
     print(f"Inferred {len(inferred_chains)} new chains")
 
+    # remove low priority chains
+    high_priority_chains: List[JsonChain] = list(
+        filter_low_priority_duplicate_chains(
+            chains + inferred_chains, prioritised_edge_names=prioritised_edge_names
+        )
+    )
+
+    # remove chains not containing nodes of interest
     filtered_chains: List[JsonChain] = [
-        chain for chain in chains + inferred_chains if _filter(chain)
+        chain for chain in high_priority_chains if _filter(chain)
     ]
     print(f"Filtered to {len(filtered_chains)} chains")
 
+    # count chains by prediction for evaluation
     chain_prediction_count: Counter[str] = Counter(
         map(itemgetter("prediction"), read_evidence_chains(Path(evidence_chains_file)))
     )

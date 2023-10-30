@@ -1,5 +1,5 @@
 import re
-from typing import List, Tuple, TypedDict
+from typing import List, Optional, Tuple, TypedDict
 
 from attrs import define, field, frozen
 
@@ -313,3 +313,29 @@ class JsonChain(TypedDict):
     metapath: List[JsonMetapath]
     path_score: float
     path: List[str]
+
+
+def stub_json_chain(
+    path: List[str],
+    prediction: Optional[str] = None,
+    metapath: Optional[List[JsonMetapath]] = None,
+) -> JsonChain:
+    if prediction is None:
+        prediction = path[0]
+
+    if metapath is None:
+        metapath = []
+
+    return JsonChain(
+        prediction=prediction,
+        prediction_score=0.0,
+        start_node=path[0],
+        end_node=path[-1],
+        metapath=metapath,
+        path_score=0.0,
+        path=path,
+    )
+
+
+def stub_json_metapath(label: str, reversed: bool = False) -> JsonMetapath:
+    return JsonMetapath(label=label, reversed=reversed)

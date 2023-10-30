@@ -1,8 +1,12 @@
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import attrs
 
-from abegidd.entities import Explanation, Prediction, Rule
+from abegidd.entities import Explanation, JsonChain, Prediction, Rule
+from abegidd.expanders import (
+    group_chains_by_prediction,
+    group_chains_with_the_same_nodes,
+)
 
 
 def filter_explanations(
@@ -77,3 +81,44 @@ def filter_predictions_for_node_names(
             )
 
     return filtered_predictions
+
+
+def filter_low_priority_duplicate_chains(
+    chains: List[JsonChain], prioritised_edge_names: List[str]
+) -> List[JsonChain]:
+    out_chains: List[JsonChain] = []
+    for prediction, prediction_group in group_chains_by_prediction(chains):
+        for node_group in group_chains_with_the_same_nodes(prediction_group):
+            # list of metapaths for each chain, eg
+            # (
+            #   {'label': 'COMPOUND_in_trial_for_DISEASE', 'reversed': False},
+            #   {'label': 'COMPOUND_treats_DISEASE', 'reversed': False}
+            # )
+            metapath_label_iterator = zip(*[chain["metapath"] for chain in node_group])
+
+            # we will set this to the node_group index of chain containing the preferred
+            # edge name. If we don't encounter an edge with a prioritised preference we
+            # return all the nodes in the node group
+            preferred_index: Union[int, None] = None
+
+            # for each row of ^^ find the index of the preferred edge
+            for label_tuple in metapath_label_iterator:
+                # if this row has preferred edges, choose that edges index
+                if any(edge["label"] in prioritised_edge_names for edge in label_tuple):
+                    for prioritised_edge_name in prioritised_edge_names:
+                        labels: List[str] = [edge["label"] for edge in label_tuple]
+                        # try to get the index of the preferred edge
+                        try:
+                            preferred_index = labels.index(prioritised_edge_name)
+                            break
+                        except ValueError:
+                            continue
+                    else:
+                        raise ValueError("Could not find preferred chain")
+
+            if preferred_index is not None:
+                out_chains.append(node_group[preferred_index])
+            else:
+                out_chains.extend(node_group)
+
+    return out_chains
