@@ -383,7 +383,7 @@ def split_edge_string(edge_string: str) -> Tuple[str, str, str]:
     return matches
 
 
-SPLIT_NODE_STRING_RE = re.compile(r"([a-z_]+)_([A-Z_]+)")
+SPLIT_NODE_STRING_RE = re.compile(r"([(),\-0-9a-z_]+)_([A-Z_]+)")
 
 
 def split_node_string(node_string: str) -> Tuple[str, str]:

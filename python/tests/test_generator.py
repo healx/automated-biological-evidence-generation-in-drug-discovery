@@ -28,6 +28,30 @@ class TestSplitNodeString:
         assert_that(node, equal_to("paracetamol"))
         assert_that(node_type, equal_to("COMPOUND"))
 
+    def test_split_with_numbers(self):
+        value = "drd2_GENE"
+
+        node, node_type = split_node_string(value)
+
+        assert_that(node, equal_to("drd2"))
+        assert_that(node_type, equal_to("GENE"))
+
+    def test_split_with_brackets(self):
+        value = "methylphenidate_(chembl_chembl796)_COMPOUND"
+
+        node, node_type = split_node_string(value)
+
+        assert_that(node, equal_to("methylphenidate_(chembl_chembl796)"))
+        assert_that(node_type, equal_to("COMPOUND"))
+
+    def test_split_with_non_alphanumeric_characters(self):
+        value = "methylphenidate,_l-threo-_COMPOUND"
+
+        node, node_type = split_node_string(value)
+
+        assert_that(node, equal_to("methylphenidate,_l-threo-"))
+        assert_that(node_type, equal_to("COMPOUND"))
+
     def test_bad_split_fails(self):
         value = "COMPOUND"
 
