@@ -374,12 +374,24 @@ def _metapath_from_atoms(atoms: List[Atom]) -> MetaPath:
 SPLIT_EDGE_STRING_RE = re.compile(r"([A-Z_]+)_([a-z_]+)_([A-Z_]+)")
 
 
-def split_edge_string(edge_string):
+def split_edge_string(edge_string: str) -> Tuple[str, str, str]:
     try:
         (matches,) = re.findall(SPLIT_EDGE_STRING_RE, edge_string)
     except ValueError:
         raise ValueError("checkout %s", edge_string)
     assert len(matches) == 3, f"uh oh {edge_string}"
+    return matches
+
+
+SPLIT_NODE_STRING_RE = re.compile(r"([a-z_]+)_([A-Z_]+)")
+
+
+def split_node_string(node_string: str) -> Tuple[str, str]:
+    try:
+        (matches,) = re.findall(SPLIT_NODE_STRING_RE, node_string)
+    except ValueError:
+        raise ValueError("checkout %s", node_string)
+    assert len(matches) == 2, f"uh oh {node_string}"
     return matches
 
 
