@@ -20,6 +20,7 @@ from abegidd.entities import (
     Rule,
 )
 from abegidd.graph import graph_from_triples, paths_with_metapath
+from abegidd.iterables import first
 from abegidd.path_scorer import CachedArrayIndexLookup, DegreeWeightedPathScorer
 
 logger = logging.getLogger(__name__)
@@ -105,7 +106,7 @@ class EvidenceChainsGenerator:
         """
         Gets all chains from a single anyburl rule
 
-        :param start_node_index: chains start_node
+        :param start_node: chains start_node
         :param end_node: chain end node index
         :param rule: anyburl rule object`
         :param max_length: max length of the chain`
@@ -129,19 +130,15 @@ class EvidenceChainsGenerator:
         # go over all paths, score them and resolved the path nodes
         # make sure to keep the ordering of node indices within a path!
         for path in paths:
-            path_nodes_indices = np.concatenate(path)
-            unique_node_indices = [
-                path_nodes_indices[idx]
-                for idx in sorted(np.unique(path_nodes_indices, return_index=True)[1])
-            ]
+            node_path = [first(pair) for pair in path] + [path[-1][1]]
 
-            if len(unique_node_indices) != len(meta_path) + 1:
+            if len(node_path) != len(meta_path) + 1:
                 continue
 
             chains.append(
                 EvidenceChainScoredPath(
-                    path_score=self._scoring.path(unique_node_indices),
-                    path_nodes=unique_node_indices,
+                    path_score=self._scoring.path(node_path),
+                    path_nodes=node_path,
                 )
             )
 
@@ -233,9 +230,9 @@ class EvidenceChainsGenerator:
              default None for all
         """
 
-        def _is_done(total_paths):
-            # if we discovered more then top_k paths - the generator is done
-            if top_k_paths is not None and total_paths >= top_k_paths:
+        def _is_done(_total_paths):
+            # if we discovered more than top_k paths - the generator is done
+            if top_k_paths is not None and _total_paths >= top_k_paths:
                 return True
             return False
 
@@ -359,10 +356,10 @@ def _metapath_from_atoms(atoms: List[Atom]) -> MetaPath:
         )
 
     # correct the edge direction
-    for first, second in zip(edge_data, edge_data[1:]):
-        MetapathEdgeData.direct_metapath_edges(first, second)
+    for _first, _second in zip(edge_data, edge_data[1:]):
+        MetapathEdgeData.direct_metapath_edges(_first, _second)
 
-    meta_path_edge_types = [et.to_edge() for et in edge_data]
+    meta_path_edge_types = [edge_type.to_edge() for edge_type in edge_data]
 
     # We disable the validation below, this is an equivalent safety check to avoid
     # assertion errors because of unequal custom Enum types (values are always equal)

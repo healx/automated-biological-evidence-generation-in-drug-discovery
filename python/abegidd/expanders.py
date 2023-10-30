@@ -43,7 +43,7 @@ def _group_chains_with_the_same_nodes(chains: List[JsonChain]) -> List[List[Json
 
 
 def group_chains_by_prediction(
-    chains=Generator[JsonChain, None, None]
+    chains: List[JsonChain],
 ) -> Generator[Tuple[str, List[JsonChain]], None, None]:
     """
     Returns a generator which whill lazily return tuples with the prediction as a string
