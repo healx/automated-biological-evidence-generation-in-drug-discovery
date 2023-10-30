@@ -1,5 +1,6 @@
 from collections import Counter
 from functools import partial
+from itertools import zip_longest
 from operator import itemgetter
 from pathlib import Path
 from typing import List, Set
@@ -9,7 +10,9 @@ import click
 from abegidd.entities import JsonChain
 from abegidd.expanders import build_deductive_chains, group_chains_by_prediction
 from abegidd.filters import filter_low_priority_duplicate_chains
+from abegidd.generator import split_edge_string, split_node_string
 from abegidd.io import read_evidence_chains
+from abegidd.iterables import flatten
 
 
 @click.command
@@ -84,8 +87,25 @@ def _chains_filter(
 def _write_filtered_chains(chains: List[JsonChain], output_file: str):
     with Path(output_file).open("w") as fh:
         for chain in chains:
-            line = " ".join(chain["path"])
+            line = _chain_to_string(chain)
             fh.write(f"{line}\n")
+
+
+def _chain_to_string(chain: JsonChain) -> str:
+    def _node_name(name: str) -> str:
+        node, _ = split_node_string(name)
+        return node.upper()
+
+    def _edge_type(label: str) -> str:
+        _, edge_type, _ = split_edge_string(label)
+        return edge_type
+
+    node_list = [_node_name(node) for node in chain["path"]]
+    label_list = [_edge_type(edge["label"]) for edge in chain["metapath"]]
+
+    return " ".join(
+        part for part in flatten(zip_longest(node_list, label_list)) if part is not None
+    )
 
 
 def _print_prediction_stats(
