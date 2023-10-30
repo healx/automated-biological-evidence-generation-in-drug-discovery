@@ -71,7 +71,7 @@ healx-chains \
 Run this command (after creating the evidence chains file) to filter chains by gene and pathway for "Parkinson disease".
 
 ```shell
-healx-gene-pathway-chains-filter \
+healx-filter \
     results/evidence-chains.jsonl \
     data/parkinson-disease-filter/genes.txt \
     data/parkinson-disease-filter/pathways.txt \
