@@ -22,7 +22,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "tox",
-    "mypy"
+    "mypy",
+    "pytest",
+    "precisely"
 ]
 
 [project.urls]
@@ -46,3 +48,8 @@ include = ["abegidd"]
 [tool.isort]
 profile = "black"
 known_first_party = ["abegidd"]
+
+[tool.mypy]
+[[tool.mypy.overrides]]
+module = "precisely"
+ignore_missing_imports = true

@@ -6,7 +6,7 @@ from abegidd.entities import Explanation, Prediction, Rule
 
 
 def filter_explanations(
-    explanations: List[Explanation], filter_condition: Dict[int, str]
+    explanations: List[Explanation], filter_condition: Dict[int, List[str]]
 ) -> List[Explanation]:
     """
     remove redundant explanations
@@ -30,7 +30,7 @@ def filter_explanations(
 
 
 def _filter_rules(
-    explanations_rules: List[Rule], filter_condition: Dict[int, str]
+    explanations_rules: List[Rule], filter_condition: Dict[int, List[str]]
 ) -> List[Rule]:
     """
     remove redundant rules

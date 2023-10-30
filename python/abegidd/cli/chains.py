@@ -12,6 +12,7 @@ from abegidd.io import (
     anyburl,
     read_explanations_filters,
     read_predictions_filters,
+    read_triples_file,
     write_evidence_chains,
 )
 
@@ -45,7 +46,6 @@ logger = logging.getLogger(__name__)
     type=click.Path(dir_okay=False, file_okay=True, exists=True),
     default=None,
 )
-@click.option("--disease", type=str)
 def _chains(
     graph_dir,
     results_dir,
@@ -53,17 +53,18 @@ def _chains(
     explanations_file,
     predictions_filter_file,
     explanations_filter_file,
-    disease,
 ):
-    triples_file = Path().cwd() / graph_dir / "triples.txt"
-    with triples_file.open("r") as fh:
-        triples = [tuple(line.strip("\n").split("\t")) for line in fh.readlines()]
+    triples = read_triples_file(Path().cwd() / graph_dir / "triples.txt")
 
+    # filter predictions to remove predictions not involving nodes in
+    # "predictions filter file"
     predictions = anyburl.read_predictions(Path(predictions_file))
     filter_node_names = read_predictions_filters(Path(predictions_filter_file))
     check_filter_nodes_in_triples(filter_node_names, triples)
     predictions = filter_predictions_for_node_names(predictions, filter_node_names)
 
+    # "explanations" are annotated edge types - filter out chains if they contain more
+    # occurrences of the edge type than desired
     explanations = anyburl.read_explanations(Path(explanations_file))
     explanations_filters = read_explanations_filters(Path(explanations_filter_file))
     check_explanations_filter_in_triples(explanations_filters, triples)
@@ -75,7 +76,7 @@ def _chains(
 
     assert len(evidence_chains) > 0, "no chains produced"
 
-    write_evidence_chains(Path("evidence-chains.jsonl"), evidence_chains)
+    write_evidence_chains(Path(results_dir) / "evidence-chains.jsonl", evidence_chains)
 
 
 def check_filter_nodes_in_triples(
@@ -107,8 +108,6 @@ def sort_and_slice_predictions_by_score(
     `top_k_predictions` param is provided
 
     :param predictions: predictions collection
-    :param top_k_predictions: top k predictions to be returned, if omitted it
-        will return all
     :return: same predictions object inline sorted with sliced predicted heads/tails
     """
 
@@ -145,8 +144,8 @@ def generate_evidence_chains(
             str,
         ]
     ],
-    predictions=List[Prediction],
-    explanations=List[Explanation],
+    predictions: List[Prediction],
+    explanations: List[Explanation],
 ):
     chains_generator = EvidenceChainsGenerator(
         triples=triples, predictions=predictions, explanations=explanations
