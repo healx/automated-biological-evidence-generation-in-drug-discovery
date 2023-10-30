@@ -5,7 +5,7 @@ from precisely import assert_that, contains_exactly, equal_to, mapping_includes
 from abegidd.entities import JsonChain
 from abegidd.expanders import (
     _build_deduced_chain,
-    _group_chains_with_the_same_nodes,
+    group_chains_with_the_same_nodes,
     group_chains_by_prediction,
 )
 
@@ -32,7 +32,7 @@ class TestGroupChainsWithTheSameNodes:
             _stub_json_chain(["node-a", "node-b", "node-c"]),
         ]
 
-        grouped_chains = list(_group_chains_with_the_same_nodes(chains))
+        grouped_chains = list(group_chains_with_the_same_nodes(chains))
 
         assert_that(
             grouped_chains,
@@ -40,6 +40,9 @@ class TestGroupChainsWithTheSameNodes:
                 contains_exactly(
                     mapping_includes({"path": ["node-a", "node-b", "node-c"]}),
                     mapping_includes({"path": ["node-a", "node-b", "node-c"]}),
+                ),
+                contains_exactly(
+                    mapping_includes({"path": ["node-a", "node-b", "node-d"]}),
                 ),
             ),
         )
