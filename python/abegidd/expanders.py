@@ -23,27 +23,28 @@ def build_deductive_chains(
     }
 
     for prediction, prediction_chains in group_chains_by_prediction(chains):
-        for same_node_chains in _group_chains_with_the_same_nodes(prediction_chains):
-            yield _build_deduced_chain(same_node_chains, edge_name_priorities_lookup)
+        for same_node_chains in group_chains_with_the_same_nodes(prediction_chains):
+            if len(same_node_chains) > 1:
+                yield _build_deduced_chain(
+                    same_node_chains, edge_name_priorities_lookup
+                )
 
 
-def _group_chains_with_the_same_nodes(chains: List[JsonChain]) -> List[List[JsonChain]]:
+def group_chains_with_the_same_nodes(chains: List[JsonChain]) -> List[List[JsonChain]]:
     """
-    Only find groups of chains with the same nodes (chains with no other matching chains
-    are not returned)
+    Only find groups of chains with the same nodes
     :param chains:
     :return: grouped chains
     """
     sorted_chains = sorted(chains, key=itemgetter("path"))
-    grouped_chains = [
+    return [
         list(chain_group)
         for _, chain_group in groupby(sorted_chains, key=itemgetter("path"))
     ]
-    return [chain_group for chain_group in grouped_chains if len(chain_group) > 1]
 
 
 def group_chains_by_prediction(
-    chains=Generator[JsonChain, None, None]
+    chains: List[JsonChain],
 ) -> Generator[Tuple[str, List[JsonChain]], None, None]:
     """
     Returns a generator which whill lazily return tuples with the prediction as a string
