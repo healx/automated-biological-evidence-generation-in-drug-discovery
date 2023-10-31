@@ -1,38 +1,22 @@
-from typing import List, Optional
-
 from precisely import assert_that, contains_exactly, equal_to, mapping_includes
 
-from abegidd.entities import JsonChain
+from abegidd.entities import JsonChain, stub_json_chain
 from abegidd.expanders import (
     _build_deduced_chain,
-    _group_chains_with_the_same_nodes,
     group_chains_by_prediction,
+    group_chains_with_the_same_nodes,
 )
-
-
-def _stub_json_chain(path: List[str], prediction: Optional[str] = None):
-    if prediction is None:
-        prediction = path[0]
-    return JsonChain(
-        prediction=prediction,
-        prediction_score=0.0,
-        start_node=path[0],
-        end_node=path[-1],
-        metapath=[],
-        path_score=0.0,
-        path=path,
-    )
 
 
 class TestGroupChainsWithTheSameNodes:
     def test_grouping(self):
         chains = [
-            _stub_json_chain(["node-a", "node-b", "node-c"]),
-            _stub_json_chain(["node-a", "node-b", "node-d"]),
-            _stub_json_chain(["node-a", "node-b", "node-c"]),
+            stub_json_chain(["node-a", "node-b", "node-c"]),
+            stub_json_chain(["node-a", "node-b", "node-d"]),
+            stub_json_chain(["node-a", "node-b", "node-c"]),
         ]
 
-        grouped_chains = list(_group_chains_with_the_same_nodes(chains))
+        grouped_chains = list(group_chains_with_the_same_nodes(chains))
 
         assert_that(
             grouped_chains,
@@ -41,6 +25,9 @@ class TestGroupChainsWithTheSameNodes:
                     mapping_includes({"path": ["node-a", "node-b", "node-c"]}),
                     mapping_includes({"path": ["node-a", "node-b", "node-c"]}),
                 ),
+                contains_exactly(
+                    mapping_includes({"path": ["node-a", "node-b", "node-d"]}),
+                ),
             ),
         )
 
@@ -48,9 +35,9 @@ class TestGroupChainsWithTheSameNodes:
 class TestGroupChainsByPrediction:
     def test_grouping(self):
         chains = [
-            _stub_json_chain(prediction="node-a", path=["a", "b", "c"]),
-            _stub_json_chain(prediction="node-a", path=["a", "b", "d"]),
-            _stub_json_chain(prediction="node-b", path=["b", "a", "c"]),
+            stub_json_chain(prediction="node-a", path=["a", "b", "c"]),
+            stub_json_chain(prediction="node-a", path=["a", "b", "d"]),
+            stub_json_chain(prediction="node-b", path=["b", "a", "c"]),
         ]
 
         grouped_chains = list(group_chains_by_prediction(chains))

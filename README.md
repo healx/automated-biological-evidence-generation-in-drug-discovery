@@ -17,7 +17,7 @@ $ make build-java
 ```
 ## Python
 
-We recommend instaling the code in a python virtualenv. Once you have a virtualenv set up, the code can be installed
+We recommend installing the code in a python virtualenv. Once you have a virtualenv set up, the code can be installed
 with
 
 ```shell
@@ -30,7 +30,7 @@ and tests can be run with tox
 tox
 ```
 
-and linters can be run with the shortchut
+and linters can be run with the shortcut
 ```shell
 make lint
 ```
@@ -71,11 +71,11 @@ healx-chains \
 Run this command (after creating the evidence chains file) to filter chains by gene and pathway for "Parkinson disease".
 
 ```shell
-healx-gene-pathway-chains-filter \
-    evidence-chains.jsonl \
+healx-filter \
+    results/evidence-chains.jsonl \
     data/parkinson-disease-filter/genes.txt \
     data/parkinson-disease-filter/pathways.txt \
     data/parkinson-disease-filter/predictions.txt \
-    data/parkinson_disease_explanations_filter.txt \
+    data/parkinson-disease-filter/prioritised-edge-types.txt \
     --filtered-evidence-chains-file filtered-evidence-chains.txt
 ```

@@ -39,7 +39,7 @@ build-backend = "setuptools.build_meta"
 anyburl-predict = "abegidd.cli.predict:_predict"
 anyburl-train = "abegidd.cli.train:_train"
 healx-chains = "abegidd.cli.chains:_chains"
-healx-gene-pathway-chains-filter = "abegidd.cli.chains_filter:_chains_filter"
+healx-filter = "abegidd.cli.chains_filter:_chains_filter"
 
 [tool.setuptools.packages.find]
 where = ["python"]
