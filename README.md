@@ -62,7 +62,7 @@ healx-chains \
     results \
     results/predict-1000 \
     results/predict-explanation \
-    --predictions-filter-file data/parkinson_disease_predicted_treatments.txt \
+    --predictions-filter-file data/parkinson-disease-filter/predictions.txt \
     --explanations-filter-file data/parkinson_disease_explanations_filter.txt
 ```
 
