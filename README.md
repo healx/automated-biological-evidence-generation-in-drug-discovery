@@ -63,7 +63,7 @@ healx-chains \
     results/predict-1000 \
     results/predict-explanation \
     --predictions-filter-file data/parkinson-disease-filter/predictions.txt \
-    --explanations-filter-file data/parkinson_disease_explanations_filter.txt
+    --explanations-filter-file data/parkinson-disease-filter/prioritised-edge-types.txt
 ```
 
 ### Filter the chains for Parkinson Disease
