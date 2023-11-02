@@ -6,6 +6,7 @@ python/*.egg-info
 __pycache__
 java/target
 
+data/triples.txt
 results
 
 # test artifacts

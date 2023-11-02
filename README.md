@@ -38,7 +38,15 @@ make lint
 
 ## Running the example: Parkinson Disease
 
-Train AnyBURL using the graph provided in [`data/triples.txt`](data/triples.txt)
+Train AnyBURL using the graph provided in [`data/triples.txt.gz`](data/triples.txt.gz)
+
+NB. This file must be decompressed before the following code can be run. To do
+this on *nix systems;
+
+```shell
+gunzip --keep data/triples.txt.gz
+```
+
 ```shell
 anyburl-train data
 ```
