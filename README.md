@@ -75,7 +75,7 @@ healx-filter \
     results/evidence-chains.jsonl \
     data/parkinson-disease-filter/genes.txt \
     data/parkinson-disease-filter/pathways.txt \
-    data/parkinson-disease-filter/predictions.txt \
+    data/parkinson-disease-filter/predictions-short-list.txt \
     data/parkinson-disease-filter/prioritised-edge-types.txt \
     --filtered-evidence-chains-file filtered-evidence-chains.txt
 ```
