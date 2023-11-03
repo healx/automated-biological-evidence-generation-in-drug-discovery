@@ -1,6 +1,7 @@
-# IDE files
+# IDE / OS files
 .idea
 .python-version
+.DS_Store
 
 python/*.egg-info
 __pycache__
