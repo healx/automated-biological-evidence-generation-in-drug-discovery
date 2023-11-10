@@ -62,8 +62,8 @@ healx-chains \
     results \
     results/predict-1000 \
     results/predict-explanation \
-    --predictions-filter-file data/parkinson_disease_predicted_treatments.txt \
-    --explanations-filter-file data/parkinson_disease_explanations_filter.txt
+    --predictions-filter-file data/parkinson-disease-filter/predictions.txt \
+    --explanations-filter-file data/parkinson-disease-filter/prioritised-edge-types.txt
 ```
 
 ### Filter the chains for Parkinson Disease
@@ -75,7 +75,7 @@ healx-filter \
     results/evidence-chains.jsonl \
     data/parkinson-disease-filter/genes.txt \
     data/parkinson-disease-filter/pathways.txt \
-    data/parkinson-disease-filter/predictions.txt \
+    data/parkinson-disease-filter/predictions-short-list.txt \
     data/parkinson-disease-filter/prioritised-edge-types.txt \
     --filtered-evidence-chains-file filtered-evidence-chains.txt
 ```
