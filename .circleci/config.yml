@@ -92,4 +92,7 @@ jobs:
 workflows:
   test:
     jobs:
-      - tox 
+      - tox
+      - run example:
+          requires:
+            - tox
