@@ -27,7 +27,72 @@ jobs:
             - /home/circleci/.local/lib
           key: v1-dependencies-{{ checksum "pyproject.toml" }}
 
+  run example:
+    executor:
+      name: python/default
+      tag: "3.11"
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pyproject.toml" }}
+            - v1-dependencies-
+      - python/install-packages:
+          pkg-manager: pip-dist
+          args: "-e '.[dev]'"
+      - run:
+          name: Install Java
+          command: |
+            sudo apt update --quiet
+            sudo apt install --quiet --yes maven
+      - run:
+          name: Build Java
+          command: make build-java
+      - run:
+          name: Replace large snapshot
+          command: sed -i -e 's/1000/50/g' data/config-*.properties
+      - run:
+          name: Run train
+          command: anyburl-train data
+      - run:
+          name: Run predict
+          command: anyburl-predict data
+      - run:
+          name: Run find-chains
+          command: |
+            healx-chains \
+            data \
+            results \
+            results/predict-50 \
+            results/predict-explanation \
+            --predictions-filter-file data/parkinson-disease-filter/predictions.txt \
+            --explanations-filter-file data/parkinson-disease-filter/prioritised-edge-types.txt
+      - run:
+          name: Run filter-chains
+          command: |
+            healx-filter \
+            results/evidence-chains.jsonl \
+            data/parkinson-disease-filter/genes.txt \
+            data/parkinson-disease-filter/pathways.txt \
+            data/parkinson-disease-filter/predictions-short-list.txt \
+            data/parkinson-disease-filter/prioritised-edge-types.txt \
+            --filtered-evidence-chains-file filtered-evidence-chains.txt
+      - run:
+          name: Assert results file length
+          command: |
+            python -c 'nlines = len(open("results/evidence-chains.jsonl").readlines()); assert nlines > 7000, f"too few chains generated: {nlines}"'
+            python -c 'nlines = len(open("filtered-evidence-chains.txt").readlines()); assert nlines > 200, f"too few filtered chains generated: {nlines}"'
+      - save_cache:
+          paths:
+            - /home/circleci/.cache/pip
+            - /home/circleci/.pyenv/versions
+            - /home/circleci/.local/lib
+          key: v1-dependencies-{{ checksum "pyproject.toml" }}
+
 workflows:
   test:
     jobs:
-      - tox 
+      - tox
+      - run example:
+          requires:
+            - tox
