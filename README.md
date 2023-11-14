@@ -65,6 +65,34 @@ healx-chains \
     --predictions-filter-file data/parkinson-disease-filter/predictions.txt \
     --explanations-filter-file data/parkinson-disease-filter/prioritised-edge-types.txt
 ```
+Results are written to an evidence chains file `results/evidence-chains.jsonl` in the JSONL format. Each line contains
+a generated "chain" prediction with the following example structure
+
+```json
+{
+  "prediction": "methixene_COMPOUND",
+  "prediction_score": 0.08924107199497017,
+  "start_node": "methixene_COMPOUND",
+  "end_node": "parkinson_disease_DISEASE",
+  "metapath": [
+    {
+      "label": "COMPOUND_inhibits_GENE",
+      "reversed": false
+    },
+    {
+      "label": "DISEASE_associates_GENE",
+      "reversed": true
+    }
+  ],
+  "path_score": 0.005949453701297636,
+  "path": [
+    "methixene_COMPOUND",
+    "htr2c_GENE",
+    "parkinson_disease_DISEASE"
+  ]
+}
+```
+we can expect to find thousands of chains in this file.
 
 ### Filter the chains for Parkinson Disease
 
@@ -79,3 +107,11 @@ healx-filter \
     data/parkinson-disease-filter/prioritised-edge-types.txt \
     --filtered-evidence-chains-file filtered-evidence-chains.txt
 ```
+
+which will produce a filtered evidence chains file in text format, `filtered-evidence-chains.txt` - one line per text
+chain. An example of one of the lines from this file are
+
+```
+AMANTADINE inhibits CHRNA3 participates NEUROACTIVE_LIGAND-RECEPTOR_INTERACTION involves CABERGOLINE in_trial_for PARKINSON_DISEASE
+```
+.
