@@ -1,6 +1,6 @@
 [project]
 name = "ABEGIDD"
-version = "0.0.1"
+version = "1.0.0"
 authors = [
     { name="Saatviga Sudhahar", email="saatviga.sudhahar@healx.io" },
     { name="Dan O'Donovan", email="dan.odonovan@healx.io" },
